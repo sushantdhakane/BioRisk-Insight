@@ -1,12 +1,20 @@
 from flask import Flask, jsonify, request, send_from_directory
 import pandas as pd
 import joblib
+import os
 
 app = Flask(__name__, static_folder='../frontend/build')
 
+# Get the base directory from an environment variable
+base_dir = os.getenv('BASE_DIR', '/Users/sushant/Pictures/biodiversity-project/backend/model')
+
+
 # Load the preprocessor and model
-preprocessor = joblib.load('/Users/sushant/Pictures/biodiversity-project/backend/preprocessor.pkl')
-model = joblib.load('/Users/sushant/Pictures/biodiversity-project/backend/animal_conservation_model.pkl')
+preprocessor_path = os.path.join(base_dir, 'model', 'preprocessor.pkl')
+preprocessor = joblib.load(preprocessor_path)
+
+model_path = os.path.join(base_dir, 'model', 'animal_conservation_model.pkl')
+model = joblib.load(model_path)
 
 # Load the data
 data = pd.read_csv('/Users/sushant/Pictures/biodiversity-project/backend/Animal Dataset.csv')
