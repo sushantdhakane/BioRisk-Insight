@@ -6,7 +6,7 @@ import os
 app = Flask(__name__, static_folder='../frontend/build')
 
 # Get the base directory from an environment variable
-base_dir = os.getenv('BASE_DIR', '/Users/sushant/Pictures/biodiversity-project/backend/model')
+base_dir = os.getenv('BASE_DIR', '/Users/sushant/Pictures/biodiversity-project/backend')
 
 
 # Load the preprocessor and model
