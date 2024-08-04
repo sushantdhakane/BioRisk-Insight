@@ -10,10 +10,10 @@ base_dir = os.getenv('BASE_DIR', 'biodiversity-project/backend')
 
 
 # Load the preprocessor and model
-preprocessor_path = os.path.join(base_dir, 'model', 'preprocessor.pkl')
+preprocessor_path = os.path.join(base_dir, 'preprocessor.pkl')
 preprocessor = joblib.load(preprocessor_path)
 
-model_path = os.path.join(base_dir, 'model', 'animal_conservation_model.pkl')
+model_path = os.path.join(base_dir, 'animal_conservation_model.pkl')
 model = joblib.load(model_path)
 
 # Load the data
