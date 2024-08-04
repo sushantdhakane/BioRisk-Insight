@@ -6,13 +6,13 @@ import os
 app = Flask(__name__, static_folder='../frontend/build')
 
 # Get the base directory from an environment variable
-base_dir = os.getenv('BASE_DIR', '/Users/sushant/Pictures/biodiversity-project/backend')
+base_dir = os.getenv('BASE_DIR', '/opt/render/project/src/biodiversity-project/backend')
 
-
-# Load the preprocessor and model
+# Construct the path to the preprocessor.pkl file using the base directory
 preprocessor_path = os.path.join(base_dir, 'model', 'preprocessor.pkl')
 preprocessor = joblib.load(preprocessor_path)
 
+# Construct the path to the animal_conservation_model.pkl file using the base directory
 model_path = os.path.join(base_dir, 'model', 'animal_conservation_model.pkl')
 model = joblib.load(model_path)
 
