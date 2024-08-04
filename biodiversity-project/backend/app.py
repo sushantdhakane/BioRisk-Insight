@@ -5,25 +5,19 @@ import os
 
 app = Flask(__name__, static_folder='../frontend/build')
 
-# Define the file paths
-preprocessor_path = 'backend/preprocessor.pkl'
-model_path = 'backend/animal_conservation_model.pkl'
-data_path = 'backend/Animal Dataset.csv'
+# Get the base directory from an environment variable
+base_dir = os.getenv('BASE_DIR', 'biodiversity-project/backend')
 
-# Check if the files exist
-if not os.path.exists(preprocessor_path):
-    raise FileNotFoundError(f"Preprocessor file not found: {preprocessor_path}")
-if not os.path.exists(model_path):
-    raise FileNotFoundError(f"Model file not found: {model_path}")
-if not os.path.exists(data_path):
-    raise FileNotFoundError(f"Data file not found: {data_path}")
 
 # Load the preprocessor and model
+preprocessor_path = os.path.join(base_dir, 'model', 'preprocessor.pkl')
 preprocessor = joblib.load(preprocessor_path)
+
+model_path = os.path.join(base_dir, 'model', 'animal_conservation_model.pkl')
 model = joblib.load(model_path)
 
 # Load the data
-data = pd.read_csv(data_path)
+data = pd.read_csv('biodiversity-project/backend/Animal Dataset.csv')
 
 @app.route('/')
 def serve():
