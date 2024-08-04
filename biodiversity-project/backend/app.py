@@ -6,9 +6,9 @@ import os
 app = Flask(__name__, static_folder='../frontend/build')
 
 # Define the file paths
-preprocessor_path = 'biodiversity-project/backend/preprocessor.pkl'
-model_path = 'biodiversity-project/backend/animal_conservation_model.pkl'
-data_path = 'biodiversity-project/backend/Animal Dataset.csv'
+preprocessor_path = 'backend/preprocessor.pkl'
+model_path = 'backend/animal_conservation_model.pkl'
+data_path = 'backend/Animal Dataset.csv'
 
 # Check if the files exist
 if not os.path.exists(preprocessor_path):
