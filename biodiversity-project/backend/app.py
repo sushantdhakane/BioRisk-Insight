@@ -1,31 +1,30 @@
+import os
 from flask import Flask, jsonify, request, send_from_directory
 import pandas as pd
 import joblib
-import os
 
-app = Flask(__name__, static_folder='../frontend/build')
+app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 
-# Get the base directory from an environment variable
-base_dir = os.getenv('BASE_DIR', '/Users/sushant/Pictures/biodiversity-project/backend/model')
+# Load the preprocessor and model
+preprocessor_path = os.path.join(os.path.dirname(__file__), 'model/preprocessor.pkl')
+model_path = os.path.join(os.path.dirname(__file__), 'model/animal_conservation_model.pkl')
+data_path = os.path.join(os.path.dirname(__file__), 'Animal Dataset.csv')
 
-# Construct the path to the preprocessor.pkl file using the base directory
-preprocessor_path = os.path.join(base_dir, 'model', 'preprocessor.pkl')
+# Debug logging
+print(f"Preprocessor path: {preprocessor_path}")
+print(f"Model path: {model_path}")
+print(f"Data path: {data_path}")
+
+# Check if the files exist
+assert os.path.exists(preprocessor_path), f"{preprocessor_path} does not exist"
+assert os.path.exists(model_path), f"{model_path} does not exist"
+assert os.path.exists(data_path), f"{data_path} does not exist"
+
 preprocessor = joblib.load(preprocessor_path)
-
-# Construct the path to the animal_conservation_model.pkl file using the base directory
-model_path = os.path.join(base_dir, 'model', 'animal_conservation_model.pkl')
 model = joblib.load(model_path)
 
 # Load the data
-data = pd.read_csv('/Users/sushant/Pictures/biodiversity-project/backend/Animal Dataset.csv')
-
-@app.route('/')
-def serve():
-    return send_from_directory(app.static_folder, 'index.html')
-
-@app.route('/<path:path>')
-def static_proxy(path):
-    return send_from_directory(app.static_folder, path)
+data = pd.read_csv(data_path)
 
 @app.route('/api/predictions', methods=['GET'])
 def get_predictions():
@@ -52,6 +51,11 @@ def get_feature_importance():
 def get_species_detail(species_id):
     species = data[data['species'] == species_id].to_dict(orient='records')
     return jsonify(species[0])
+
+# Serve React App
+@app.route('/')
+def serve_react_app():
+    return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
