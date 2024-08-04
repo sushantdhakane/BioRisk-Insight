@@ -2,13 +2,16 @@ import os
 from flask import Flask, jsonify, request, send_from_directory
 import pandas as pd
 import joblib
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
 
 app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 
-# Load the preprocessor and model
-preprocessor_path = os.path.join(os.path.dirname(__file__), 'model/preprocessor.pkl')
-model_path = os.path.join(os.path.dirname(__file__), 'model/animal_conservation_model.pkl')
-data_path = os.path.join(os.path.dirname(__file__), 'Animal Dataset.csv')
+# Load the preprocessor and model using environment variables
+preprocessor_path = os.getenv('PREPROCESSOR_PATH')
+model_path = os.getenv('MODEL_PATH')
+data_path = os.getenv('DATA_PATH')
 
 # Debug logging
 print(f"Preprocessor path: {preprocessor_path}")
