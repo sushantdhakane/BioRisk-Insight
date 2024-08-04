@@ -2,4 +2,5 @@ Flask
 gunicorn
 pandas
 joblib
+scikit-learn
 python-dotenv==0.19.2
