@@ -17,7 +17,8 @@ model_path = os.path.join(base_dir, 'animal_conservation_model.pkl')
 model = joblib.load(model_path)
 
 # Load the data
-data = pd.read_csv('biodiversity-project/backend/Animal Dataset.csv')
+csv_path = os.path.join(os.path.dirname(__file__), 'Animal Dataset.csv')
+data = pd.read_csv(csv_path)
 
 @app.route('/')
 def serve():
