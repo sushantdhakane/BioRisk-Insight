@@ -1,33 +1,23 @@
-import os
 from flask import Flask, jsonify, request, send_from_directory
 import pandas as pd
 import joblib
-from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env file
+app = Flask(__name__, static_folder='../frontend/build')
 
-app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
-
-# Load the preprocessor and model using environment variables
-preprocessor_path = os.getenv('PREPROCESSOR_PATH')
-model_path = os.getenv('MODEL_PATH')
-data_path = os.getenv('DATA_PATH')
-
-# Debug logging
-print(f"Preprocessor path: {preprocessor_path}")
-print(f"Model path: {model_path}")
-print(f"Data path: {data_path}")
-
-# Check if the files exist
-assert os.path.exists(preprocessor_path), f"{preprocessor_path} does not exist"
-assert os.path.exists(model_path), f"{model_path} does not exist"
-assert os.path.exists(data_path), f"{data_path} does not exist"
-
-preprocessor = joblib.load(preprocessor_path)
-model = joblib.load(model_path)
+# Load the preprocessor and model
+preprocessor = joblib.load('biodiversity-project/backend/preprocessor.pkl')
+model = joblib.load('biodiversity-project/backend/animal_conservation_model.pkl')
 
 # Load the data
-data = pd.read_csv(data_path)
+data = pd.read_csv('biodiversity-project/backend/Animal Dataset.csv')
+
+@app.route('/')
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/<path:path>')
+def static_proxy(path):
+    return send_from_directory(app.static_folder, path)
 
 @app.route('/api/predictions', methods=['GET'])
 def get_predictions():
@@ -54,11 +44,6 @@ def get_feature_importance():
 def get_species_detail(species_id):
     species = data[data['species'] == species_id].to_dict(orient='records')
     return jsonify(species[0])
-
-# Serve React App
-@app.route('/')
-def serve_react_app():
-    return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
