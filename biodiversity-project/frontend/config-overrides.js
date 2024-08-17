@@ -1,4 +1,5 @@
-import { override, addBabelPreset } from 'customize-cra';
+const { override, addBabelPreset } = require('customize-cra');
+
 
 export default override(
   addBabelPreset('@babel/preset-env'),
